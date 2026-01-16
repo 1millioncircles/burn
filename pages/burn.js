@@ -16,7 +16,7 @@ const WalletMultiButton = dynamic(
   async () => (await import("@solana/wallet-adapter-react-ui")).WalletMultiButton,
   { ssr: false }
 );
-// yoooo what's up welcome to the code for this particular part of this website. I wrote this from scratch with chat gpt 5.2's help over around 100 queries and around 6-8 legitimate hours of work. This was my first time really ever coding anything blockchain transaction related and I truly built this page from the ground up. I'm not sure if it could be simplified more because I ran into many errors along the way trying to get it to really connect but here it is, a very simple burn function with 1000:1 ratio, caps at 1 million circles. This exact blockchain code on this page was the biggest hurdle mentally that I've been facing for the past 6 months since coming up with this idea in regards to preparation. I'd considered hiring someone but I didn't want to invite a lack of security, so here we are. Thank you for reading. I hope you have a wonderful day.
+// yoooo what's up welcome to the code for this particular part of this website. I wrote this from scratch with chat gpt 5.2's help over around 100 queries and around 6-8 legitimate hours of work. This was my first time really ever coding anything blockchain transaction related and I truly built this page from the ground up. I'm not sure if it could be simplified more because I ran into many errors along the way trying to get it to really connect but here it is, a very simple burn function with 1000:1 ratio, caps at 1 million circles. This exact blockchain code on this page was the biggest hurdle mentally that I had been facing for the past 6 months since coming up with this idea in regards to preparation. I'd considered hiring someone but I didn't want to invite a lack of security, so here we are. Thank you for reading. I hope you have a wonderful day.
 
 // Replace this with real mint wen launch!!!!!!
 const CIRCLE_MINT = new PublicKey("9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump");
@@ -171,7 +171,7 @@ circles === 144n ? "Gross. " :
 circles === 180n ? "Don't make me turn this thing around. " :
 circles === 203n ? "CONNECTICUTTTTTTTT!!!!!" :
 circles === 211n ? "Essential community services, connecting people to local resources." :
-circles === 212n ? "I was in the 212, on the uptown A..." :
+circles === 212n ? "I was in the 212, on the uptown A... and it was BOILING" :
 circles === 230n ? "When's the best time to go to the dentist? Tooth hurty." :
 circles === 248n ? "Positive commandments. אַבְרָהָם " :
 circles === 256n ? "Byte me. " :
@@ -194,7 +194,8 @@ circles === 418n ? "I'm a teapot. " :
 circles === 420n ? "Grass probably helped me as much as it hurt me. Especially as a performer. When you're high, it's easy to kid yourself about how clever certain mediocre pieces of material are. But, on the other hand, pot opens windows and doors that you may not be able to get through any other way. - George Carlin " : 
 circles === 432n ? "Raise your frequency!!!!!" :
 circles === 433n ? "Silence." :
-circles === 440n ? "Who hijacked the music??? " :
+circles === 440n ? "Who hijacked the music??? That's the secret of bluegrass: Keep every instrument in a separate octave, because Pythagoras (lol) set it up and gave the A note 440 vibrations. If octave is doublin' the A underneath that'd be 220 vibrations, the next 110 and the next 55." :
+circles === 451n ? ""Cram them full of noncombustible data, chock them so damned full of ‘facts’ they feel stuffed, but absolutely ‘brilliant’ with information. Then they’ll feel they’re thinking, they’ll get a sense of motion without moving. And they’ll be happy, because facts of that sort don’t change. Don’t give them any slippery stuff like philosophy or sociology to tie things up with. " :
 circles === 511n ? "Up to the minute traffic and transit information." :
 circles === 512n ? "Keep Austin Weird. " :
 circles === 541n ? "יִשְׂרָאֵל" :
@@ -202,7 +203,7 @@ circles === 561n ? "Carmichael number??? WHO ARE YOU" :
 circles === 611n ? "תּוֹרָה " :
 circles === 613n ? "That's a lot of commandments..." :
 circles === 617n ? "SHIPPIN' UP TO BOSTON!!! " :
-circles === 666n ? "Here is wisdom: Let him that hath understanding count the number of the beast, for it is the number of a man; and his number is six hundred threescore and six. The 36th triangular number." : 
+circles === 666n ? "Here is wisdom: Let him that hath understanding count the number of the beast, for it is the number of a man; and his number is six hundred threescore and six. ((The 36th triangular number))" : 
 circles === 710n ? "Get a job. " :
 circles === 711n ? "Thank you, come again! " :
 circles === 718n ? "NO SLEEP 'TIL " :
@@ -254,23 +255,24 @@ circles === 90210n ? " Beverly Hills: That's where I wanna be. Gimme gimme, gimm
 circles === 98765n ? "DHS!!! " :
 circles === 99991n ? "Largest 5-digit Prime number." :
 circles === 112358n ? "You must be some kind of fibonacci fanboy..." :
+circles === 121234n ? " Count me off! " :
 circles === 123456n ? "Oh, did you think something super special would happen if you typed this number in or something???? You think this is significant???? There's no way you actually have this many... STOP POKING AROUND AND JUST BURN SOME CIRCLES ALREADY" :
 circles === 144000n ? "I'll see you there, my friend." :
 circles === 161803n ? "Writing this code has been a φ-ver dream" :
 circles === 186000n ? "Light speed: miles per second" :
 circles === 192000n ? "There's a monkey in the jungle watching a vapor trail caught up in a conflict between his brain and his tail. And if time's elimination, then we got nothing to lose. Please repeat the message: It's the music that we choose." :
-circles === 210000n ? "Blocks between bitcoin halvings... (HODL) " :
+circles === 210000n ? "Blocks between bitcoin halvings... (HODL my friend) " :
 circles === 210420n ? "Out of bed just after one, down in time to catch the sun. " : 
 circles === 271828n ? "Anyone? Anyone? Euler? Euler? - Ferris Euler's Day Off" :
 circles === 299792n ? "Light speed: km/s if you don't use freedom units." :
-circles === 314159n ? " Pi R Squared?? NO! PIES ARE ROUND!!!!!!!!" :
+circles === 314159n ? "Pi R Squared?? NO! PIES ARE ROUND!!!!!!!!" :
 circles === 420420n ? "Blaze it. Blaze it." :
-circles === 481516n ? "23, 42. WHAT DO THEY MEAN??. " :
-circles === 525600n ? "Minutes in a year" : 
+circles === 481516n ? "23, 42. WHAT DO THEY MEAN?????. " :
+circles === 525600n ? "Minutes in a year, my least favorite musical." : 
 circles === 696969n ? "Nice. Nice. Nice." :
 circles === 867530n ? "9" :
 circles === 999983n ? "Largest 6-digit prime" :
-circles === 999999n ? "YOU WISH" :
+circles === 999999n ? "YOU WISH :)" :
 
 
 "";

@@ -140,26 +140,31 @@ export default function BurnCircles() {
     const circles = BigInt(s);
 const egg = 
 circles === 1n ? "AN ARTIST RESPECTS THE CIRCLE THAT SERVES AS THE FOUNDATION OF CREATIVITY" :
+circles === 10n ? "Tetractys, the 4th triangular number." :	
 circles === 12n ? "Eggs? Donuts? Bagels? Clock? Zodiac? Grades? Jurors? Inches? Vinyl? Roses? Tribes? Apostles? Olympians? Cheaper by the... " :
 circles === 13n ? "There isn't even an elevator button for this..." :
+circles === 15n ? "The 5th triangular number." : 
 circles === 18n ? "חַי" :
-circles === 21n ? "What's 9 + 10? Blackjack. " :
+circles === 21n ? "What's 9 + 10? Blackjack. The 6th triangular number. " :
 circles === 22n ? "I don't know about you... " :
-circles === 27n ? "I said your name 27 times, would that bring you back to life?" :
+circles === 27n ? "I said your name 27 times, would that bring you back to life? Don't join the club. The 7th triangular number." :
 circles === 32n ? "לֵב" :
-circles === 33n ? "Highest honor." :
+circles === 33n ? "Highest honorary degree, vertebrae in the spine." :
 circles === 34n ? "You sick freak. " :
+circles === 36n ? "(1³+2³+3³=36), Roll two dice, Lamed Vavniks, the 8th triangular number." :
 circles === 42n ? "Don't forget to bring a towel." :  
 circles === 45n ? "אָדָם" :
 circles === 52n ? "Weeks in the year and cards in the deck." :  
 circles === 55n ? "Shfifty-five. " :
+circles === 64n ? "Squares on a chessboard. " :
 circles === 67n ? "6 - 7? What are you, in middle school?" : 
 circles === 68n ? "It's like 69 but, uh, you just do it for me and I'll owe you one..." :
 circles === 69n ? "Nice. " :
 circles === 72n ? "Highly significant... " :
 circles === 73n ? "חָכְמָה" :
 circles === 88n ? "Largest number that doesn't contain the letter N. 4th hexadecagonal number. Keys on a piano. # of constellations. MPH to go back to the future. Nazi scum fuck off. Love and kisses." :  
-circles === 91n ? "Very very very significant, Amen." :
+circles === 90n	? "Right angle."
+circles === 91n ? "Amen." :
 circles === 93n ? "Do what thou wilt shall be the whole of the law. " :
 circles === 96n ? "Quite bitter beings like to stack their bodies high." :
 circles === 99n ? "I've been waiting so long. Luftballons. Bottles of beer on the wall. Problems, but a bitch ain't one." :
@@ -195,7 +200,7 @@ circles === 420n ? "Grass probably helped me as much as it hurt me. Especially a
 circles === 432n ? "Raise your frequency!!!!!" :
 circles === 433n ? "Silence." :
 circles === 440n ? "Who hijacked the music??? That's the secret of bluegrass: Keep every instrument in a separate octave, because Pythagoras (lol) set it up and gave the A note 440 vibrations. If octave is doublin' the A underneath that'd be 220 vibrations, the next 110 and the next 55." :
-circles === 451n ? ""Cram them full of noncombustible data, chock them so damned full of ‘facts’ they feel stuffed, but absolutely ‘brilliant’ with information. Then they’ll feel they’re thinking, they’ll get a sense of motion without moving. And they’ll be happy, because facts of that sort don’t change. Don’t give them any slippery stuff like philosophy or sociology to tie things up with. " :
+circles === 451n ? "Cram them full of noncombustible data, chock them so damned full of ‘facts’ they feel stuffed, but absolutely ‘brilliant’ with information. Then they’ll feel they’re thinking, they’ll get a sense of motion without moving. And they’ll be happy, because facts of that sort don’t change. Don’t give them any slippery stuff like philosophy or sociology to tie things up with. " :
 circles === 511n ? "Up to the minute traffic and transit information." :
 circles === 512n ? "Keep Austin Weird. " :
 circles === 541n ? "יִשְׂרָאֵל" :
@@ -207,7 +212,7 @@ circles === 666n ? "Here is wisdom: Let him that hath understanding count the nu
 circles === 710n ? "Get a job. " :
 circles === 711n ? "Thank you, come again! " :
 circles === 718n ? "NO SLEEP 'TIL " :
-circles === 789n ? "So why did 7 eat 9?? Because they heard you were supposed to eat 3^2 meals a day. Somebody needs to lock up that cannibalistic freak." :
+circles === 789n ? "So why did 7 eat 9?? Because they heard you were supposed to eat 3² meals a day. Somebody needs to lock up that cannibalistic freak." :
 circles === 808n ? "808 kick drum, 808 hat. 808 snare drum, 808 clap. Got an 808 this and an 808 that. Got an 808 boom and an 808 bap. " :
 circles === 811n ? "Call before you dig. " :
 circles === 911n ? "Never forget. " :
@@ -234,6 +239,7 @@ circles === 2122n ? "Get out, get under. " :
 circles === 2468n ? "Who do we appreciate?" :
 circles === 2701n ? "Wow... you... figured out one of the most important numbers... ever... Like literally mystery of the universe type shit... keep exploring. You have the divine spark within you. This is the ultimate easter egg. No number compares." : 
 circles === 3008n ? "You're so 2000 and late. " :
+circles === 4321n ? "Earth below us: Drifting, falling. Floating weightless: calling, calling home. " :
 circles === 4950n ? " the 99th triangular number..." :
 circles === 5050n ? " the 100th triangular number..." :
 circles === 6174n ? "Abra Kaprekar-dabra Alakazam! This number is magic!" :
@@ -252,9 +258,9 @@ circles === 80808n ? "Air raid I slang the math raider nation black cab psychic 
 circles === 84716n ? "Heaven on earth. IYKYK. " :
 circles === 86400n ? " Seconds in a day" : 
 circles === 90210n ? " Beverly Hills: That's where I wanna be. Gimme gimme, gimme gimme. " : 
-circles === 98765n ? "DHS!!! " :
+circles === 98765n ? "4321? Desert Hot Springs!!! " :
 circles === 99991n ? "Largest 5-digit Prime number." :
-circles === 112358n ? "You must be some kind of fibonacci fanboy..." :
+circles === 112358n ? "You must be some kind of fibonacci fan..." :
 circles === 121234n ? " Count me off! " :
 circles === 123456n ? "Oh, did you think something super special would happen if you typed this number in or something???? You think this is significant???? There's no way you actually have this many... STOP POKING AROUND AND JUST BURN SOME CIRCLES ALREADY" :
 circles === 144000n ? "I'll see you there, my friend." :

@@ -163,7 +163,7 @@ circles === 69n ? "Nice. " :
 circles === 72n ? "Highly significant... " :
 circles === 73n ? "חָכְמָה" :
 circles === 88n ? "Largest number that doesn't contain the letter N. 4th hexadecagonal number. Keys on a piano. # of constellations. MPH to go back to the future. Nazi scum fuck off. Love and kisses." :  
-circles === 90n	? "Right angle."
+circles === 90n	? "Right angle." :
 circles === 91n ? "Amen." :
 circles === 93n ? "Do what thou wilt shall be the whole of the law. " :
 circles === 96n ? "Quite bitter beings like to stack their bodies high." :

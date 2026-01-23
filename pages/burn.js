@@ -19,7 +19,7 @@ const WalletMultiButton = dynamic(
 // yoooo what's up welcome to the code for this particular part of this website. I wrote this from scratch with chat gpt 5.2's help over around 100 queries and around 6-8 legitimate hours of work. This was my first time really ever coding anything blockchain transaction related and I truly built this page from the ground up. I'm not sure if it could be simplified more because I ran into many errors along the way trying to get it to really connect but here it is, a very simple burn function with 1000:1 ratio, caps at 1 million circles. This exact blockchain code on this page was the biggest hurdle mentally that I had been facing for the past 6 months since coming up with this idea in regards to preparation. I'd considered hiring someone but I didn't want to invite a lack of security, so here we are. Thank you for reading. I hope you have a wonderful day.
 
 // Replace this with real mint wen launch!!!!!!
-const CIRCLE_MINT = new PublicKey("9BB6NFEcjBCtnNLFko2FqVQBq8HHM13kCyYcdQbgpump");
+const CIRCLE_MINT = new PublicKey("Aea8zJW7jp1wkct3BjMeekBC1RQnHQyrvNutigc3pump");
 
 
 const TOKENS_PER_CIRCLE = 1000n;

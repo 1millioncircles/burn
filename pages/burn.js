@@ -289,8 +289,8 @@ if (isEgg) setStatus(egg.trim());
     if (circles > 999999n) return setStatus("I admire your confidence...");
     if (circles > circlesAvailable) return setStatus(
   egg
-    ? `${egg}\nYou only have ${circlesAvailable} physical circles worth of tokens. I wish you had more, too.`
-    : `You only have ${circlesAvailable} physical circles worth of tokens. I wish you had more, too.`
+    ? `${egg}\nYou only have ${circlesAvailable} physical circles worth of tokens, not quite enough. I wish you had more, too.`
+    : `You only have ${circlesAvailable} physical circles worth of tokens, not quite enough. I wish you had more, too.`
 );
 
 

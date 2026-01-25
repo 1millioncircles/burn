@@ -148,7 +148,7 @@ circles === 18n ? "חַי" :
 circles === 21n ? "What's 9 + 10? Blackjack. The 6th triangular number. " :
 circles === 22n ? "I don't know about you... " :
 circles === 27n ? "I said your name 27 times, would that bring you back to life? Don't join the club. The 7th triangular number." :
-circles === 32n ? "לֵב" :
+circles === 32n ? "Paths of creation, LEV!!!" :
 circles === 33n ? "Highest honorary degree, vertebrae in the spine." :
 circles === 34n ? "You sick freak. " :
 circles === 36n ? "(1³+2³+3³=36), Roll two dice, Lamed Vavniks, the 8th triangular number." :

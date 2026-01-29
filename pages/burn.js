@@ -456,7 +456,7 @@ return;
               Blockchain transactions are irreversible.<br />Burn at your own risk.<br />
               By clicking this button you confirm that you understand and accept all responsibility.<br />
               <br /><br />
-              To redeem your physical circles, you must claim within 24 hours.<br />
+              To redeem your physical circles, you must claim within 24 hours by emailing 1millioncircles@gmail.com.<br />
               Unclaimed circles will be destroyed.<br /><br />
               Thank you for truly supporting the 1 million circles project.
             </div>

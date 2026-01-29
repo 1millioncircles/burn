@@ -71,7 +71,8 @@ export default function Redeem() {
 
   return (
     <main style={{ maxWidth: 780, margin: "40px auto", padding: 20, textAlign: "center", fontFamily: "system-ui" }}>
-      <h1 style={{ marginTop: 0 }}>THANK YOU FOR BURNING <br />(OPTIONAL) Redeem your physical circles</h1>
+      <h1 style={{ marginTop: 0 }}>THANK YOU FOR BURNING <br />(OPTIONAL) Redeem your physical circles: <br />
+1millioncircles@gmail.com</h1>
 
       <div style={{ border: "1px solid #ddd", borderRadius: 12, padding: 16, maxWidth: 640, margin: "0 auto" }}>
         <div style={{ fontSize: 13, opacity: 0.75 }}><div

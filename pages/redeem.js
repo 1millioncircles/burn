@@ -29,7 +29,7 @@ export default function Redeem() {
       "• Wallet address used for burn:",
       publicKey ? publicKey.toBase58() : "(not connected)",
       "",
-      "• Full legal name:",
+      "• Name:",
       "[ENTER NAME]",
       "",
       "• Mailing address:",
@@ -40,9 +40,9 @@ export default function Redeem() {
       "",
 
       "• Additional comments / requests / shipping instructions: ",
-"[INTERNATIONAL, FIRST CLASS, OR PERSONAL HAND-DELIVERY MAY REQUIRE ADDITIONAL SHIPPING COSTS, HOWEVER I WILL TRY MY BEST TO HONOR THESE REQUESTS]",
+"[INTERNATIONAL, FIRST CLASS, OR PERSONAL HAND-DELIVERY MAY REQUIRE ADDITIONAL COSTS.  I WILL DO MY BEST TO HONOR THESE REQUESTS. ]",
       "",
-      "I hereby acknowledge that physical circles will only be shipped, after 1 million have been completed.",
+      "I hereby acknowledge that physical circles will only be shipped after all 1 million have been completed, likely in July 2026 at the very earliest.",
       "",
       "Thank you,",
       "[YOUR NAME]",
@@ -71,8 +71,9 @@ export default function Redeem() {
 
   return (
     <main style={{ maxWidth: 780, margin: "40px auto", padding: 20, textAlign: "center", fontFamily: "system-ui" }}>
-      <h1 style={{ marginTop: 0 }}>THANK YOU FOR BURNING <br />(OPTIONAL) Redeem your physical circles: <br />
-1millioncircles@gmail.com</h1>
+      <h1 style={{ marginTop: 0 }}>THANK YOU FOR BURNING <br />Redeem your physical circles: <br />
+1millioncircles@gmail.com
+<br />(OPTIONAL)</h1>
 
       <div style={{ border: "1px solid #ddd", borderRadius: 12, padding: 16, maxWidth: 640, margin: "0 auto" }}>
         <div style={{ fontSize: 13, opacity: 0.75 }}><div
@@ -90,7 +91,7 @@ I honor you for standing among an esteemed and noble class of art appreciators, 
 or:
 
   <br />
- <b>To redeem your physical circles, please continue below.</b><br />
+ <p style={{ fontSize: "18px" }}><b>To redeem your physical circles, please continue below.</b><br /></p>
 All personal information remains secure until shipment and will be deleted shortly thereafter unless otherwise explicitly stated.
 </div>
 
@@ -101,7 +102,7 @@ In the highly unlikely event of multiple claims for the same transaction, redemp
       </div>
 
 <div style={{ marginTop: 14, fontSize: 13, opacity: 0.75, textAlign: "center" }}>
-  Email text (what will be copied):
+<p style={{ fontSize: "24px" }}>YOU MUST COPY/PASTE THE FOLLOWING TEXT, <br /> FILL OUT SHIPPING INFO, <br />AND SEND TO 1MILLIONCIRCLES@GMAIL.COM TO CLAIM YOUR PHYSICAL CIRCLES </p>
 </div>
 
 <div
@@ -127,7 +128,7 @@ line.startsWith("Following") ||
  line.startsWith("• Contact info") ||
       line.startsWith("• Mailing address") ||
       line.startsWith("• Contact email") ||
-      line.startsWith("• Full legal name") ||
+      line.startsWith("• Name") ||
       line.startsWith("• Wallet address") ||
       line.startsWith("• Transaction signature") ||
       line.startsWith("• Number of physical circles") ||

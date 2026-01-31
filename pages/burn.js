@@ -363,7 +363,7 @@ return;
       </div>
 
       <p>
-     <b>1000 CIRCLES token = 1 physical circle</b>.<br /> 1 full sheet = 10,000 physical circles 
+     <b>1000 $CIRCLES token = 1 physical circle</b>.<br /> 1 full sheet = 10,000 physical circles 
       </p>
 
       <div style={{ border: "1px solid #ddd", borderRadius: 12, padding: 16 }}>

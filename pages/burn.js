@@ -407,26 +407,35 @@ return;
   }
 }}
 
-          placeholder="Physical circles (whole number)"
-          inputMode="numeric"
-          style={{ width: "100%", textAlign: "center", padding: 12, marginTop: 12, borderRadius: 10, border: "1px solid #ccc" }}
-        />
+       placeholder="Physical circles (whole number)"
+inputMode="numeric"
+style={{
+  width: "100%",
+  boxSizing: "border-box",
+  textAlign: "center",
+  padding: 12,
+  marginTop: 12,
+  borderRadius: 10,
+  border: "1px solid #ccc",
+}}
+/>
 
-        <button
-          onClick={burn}
-          style={{
-            marginTop: 12,
-            width: "100%",
-            padding: 18,
-            borderRadius: 14,
-            border: "2px solid #111",
-            fontSize: 18,
-            fontWeight: 800,
-            cursor: "pointer",
-          }}
-        >
-          🔥 BURN NOW
-        </button>
+<button
+  onClick={burn}
+  style={{
+    marginTop: 12,
+    width: "100%",
+    padding: 18,
+    borderRadius: 14,
+    border: "2px solid #111",
+    fontSize: 18,
+    fontWeight: 800,
+    cursor: "pointer",
+    textAlign: "center",
+  }}
+>
+  🔥 BURN NOW
+</button>
 
         {/* ✅ Only show the “how much will burn” block AFTER a valid input is entered */}
         {inputIsValid && (

@@ -371,7 +371,7 @@ return;
 
 
 <h1 style={{ margin: 0, textAlign: "center" }}>
-  🔥 Burn Circles
+  🔥 Burn Circles 🔥
 </h1>
 
 
@@ -465,7 +465,7 @@ style={{
     textAlign: "center",
   }}
 >
-  🔥 BURN NOW
+  🔥 BURN NOW 🔥
 </button>
 
         {/* ✅ Only show the “how much will burn” block AFTER a valid input is entered */}

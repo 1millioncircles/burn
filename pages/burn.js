@@ -365,12 +365,26 @@ return;
     justifyContent: "space-between",
     alignItems: "center",
     gap: 12,
+    flexWrap: "wrap",
   }}
 >
+
   <h1 style={{ margin: 0 }}>🔥 Burn Circles</h1>
 
-  <div style={{ maxWidth: 320 }}>
-    <WalletMultiButton />
+<div
+  style={{
+    width: "100%",
+    maxWidth: 320,
+    minWidth: 240,
+    boxSizing: "border-box",
+    overflow: "hidden",
+    display: "flex",
+    justifyContent: "flex-end",
+  }}
+>
+<div style={{ width: "100%" }}>
+  <WalletMultiButton style={{ width: "100%", justifyContent: "center" }} />
+</div>
   </div>
 </div>
 

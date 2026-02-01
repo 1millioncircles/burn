@@ -56,6 +56,7 @@ export default function BurnCircles() {
   const [status, setStatus] = useState("");
   const [txSig, setTxSig] = useState("");
 
+
   // Detect token program owner of the mint
   useEffect(() => {
     (async () => {
@@ -123,6 +124,7 @@ export default function BurnCircles() {
   useEffect(() => {
     refresh();
   }, [refresh, publicKey?.toBase58(), tokenProgramId?.toBase58?.()]);
+
 
   const burn = useCallback(async () => {
     setTxSig("");
@@ -357,10 +359,20 @@ return;
 
   return (
     <main style={{ maxWidth: 780, margin: "40px auto", padding: 20, textAlign: "center", fontFamily: "system-ui" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", textAlign: "center", alignItems: "center", gap: 12 }}>
-        <h1 style={{ margin: 0 }}>🔥 Burn Circles</h1>
-        <WalletMultiButton />
-      </div>
+<div
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 12,
+  }}
+>
+  <h1 style={{ margin: 0 }}>🔥 Burn Circles</h1>
+
+  <div style={{ maxWidth: 320 }}>
+    <WalletMultiButton />
+  </div>
+</div>
 
       <p>
      <b>1 physical circle = 1000 $CIRCLES token</b>.<br /> 10,000 physical circles = 1 full sheet 
@@ -419,6 +431,7 @@ style={{
   border: "1px solid #ccc",
 }}
 />
+
 
 <button
   onClick={burn}

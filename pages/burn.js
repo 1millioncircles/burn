@@ -362,14 +362,18 @@ return;
 <div
   style={{
     display: "flex",
-    justifyContent: "space-between",
+    flexDirection: "column",
     alignItems: "center",
-    gap: 12,
-    flexWrap: "wrap",
+    gap: 16,
+    textAlign: "center",
   }}
 >
 
-  <h1 style={{ margin: 0 }}>🔥 Burn Circles</h1>
+
+<h1 style={{ margin: 0, textAlign: "center" }}>
+  🔥 Burn Circles
+</h1>
+
 
 <div
   style={{
@@ -379,7 +383,7 @@ return;
     boxSizing: "border-box",
     overflow: "hidden",
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: "center",
   }}
 >
 <div style={{ width: "100%" }}>

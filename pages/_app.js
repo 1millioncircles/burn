@@ -5,16 +5,22 @@ import { PhantomWalletAdapter, SolflareWalletAdapter } from "@solana/wallet-adap
 
 import "@solana/wallet-adapter-react-ui/styles.css";
 
+const ENDPOINTS = [
+  "https://solana-rpc.publicnode.com",
+  "https://solana.drpc.org",
+  "https://rpc.ankr.com/solana",
+  "https://api.mainnet-beta.solana.com",
+];
+
 export default function App({ Component, pageProps }) {
-  // Public RPC that allows browser access without an API key
-const endpoint = "https://solana-rpc.publicnode.com";
+  const endpoint = ENDPOINTS[0];
   const wallets = useMemo(
     () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
     []
   );
 
   return (
-    <ConnectionProvider endpoint={endpoint}>
+    <ConnectionProvider endpoint={endpoint} config={{ commitment: "confirmed" }}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
           <Component {...pageProps} />

@@ -4,8 +4,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Connection, PublicKey, Transaction } from "@solana/web3.js";
 import {
   TOKEN_PROGRAM_ID,
+  TOKEN_2022_PROGRAM_ID,
   createBurnCheckedInstruction,
-  getAssociatedTokenAddress,
 } from "@solana/spl-token";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
@@ -340,6 +340,8 @@ export default function BurnPage() {
   const [tokenBalance, setTokenBalance] = useState("0");
   const [physicalCircles, setPhysicalCircles] = useState("0");
   const [rawBalance, setRawBalance] = useState(0n);
+  const [sourceTokenAccount, setSourceTokenAccount] = useState(null);
+  const [tokenProgramId, setTokenProgramId] = useState(TOKEN_PROGRAM_ID);
   const [amount, setAmount] = useState("");
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
@@ -361,28 +363,51 @@ export default function BurnPage() {
       setTokenBalance("0");
       setPhysicalCircles("0");
       setRawBalance(0n);
+      setSourceTokenAccount(null);
       return;
     }
 
     try {
       await withWorkingConnection(connection.rpcEndpoint, async (conn) => {
-        const tokenAccount = await getAssociatedTokenAddress(
-          CIRCLES_MINT,
+        const mintInfo = await conn.getAccountInfo(CIRCLES_MINT, "confirmed");
+        const programId =
+          mintInfo && mintInfo.owner.equals(TOKEN_2022_PROGRAM_ID)
+            ? TOKEN_2022_PROGRAM_ID
+            : TOKEN_PROGRAM_ID;
+        setTokenProgramId(programId);
+
+        const resp = await conn.getParsedTokenAccountsByOwner(
           publicKey,
-          false,
-          TOKEN_PROGRAM_ID
+          { mint: CIRCLES_MINT },
+          "confirmed"
         );
-        const balance = await conn.getTokenAccountBalance(tokenAccount);
-        const raw = BigInt(balance.value.amount);
-        setRawBalance(raw);
-        setTokenBalance(balance.value.uiAmountString || "0");
-        setPhysicalCircles((raw / UNITS_PER_CIRCLE).toLocaleString());
+
+        let totalRaw = 0n;
+        let bestAcct = null;
+        let bestRaw = 0n;
+        let uiTotal = 0;
+
+        for (const item of resp.value) {
+          const raw = BigInt(item.account.data.parsed.info.tokenAmount.amount);
+          uiTotal += Number(item.account.data.parsed.info.tokenAmount.uiAmount || 0);
+          totalRaw += raw;
+          if (raw > bestRaw) {
+            bestRaw = raw;
+            bestAcct = item.pubkey;
+          }
+        }
+
+        setRawBalance(totalRaw);
+        setSourceTokenAccount(bestAcct);
+        setTokenBalance(uiTotal.toLocaleString(undefined, { maximumFractionDigits: 6 }));
+        setPhysicalCircles((totalRaw / UNITS_PER_CIRCLE).toLocaleString());
       });
     } catch (error) {
       console.error(error);
       setTokenBalance("0");
       setPhysicalCircles("0");
       setRawBalance(0n);
+      setSourceTokenAccount(null);
     }
   }, [connection, publicKey]);
 
@@ -393,6 +418,10 @@ export default function BurnPage() {
   async function burnTokens() {
     if (!publicKey) {
       setStatus("Connect wallet first.");
+      return;
+    }
+    if (!sourceTokenAccount) {
+      setStatus("It seems like you don't have any circles. YET.");
       return;
     }
 
@@ -410,7 +439,7 @@ export default function BurnPage() {
       setStatus("How do you expect to burn 0 circles?");
       return;
     }
-    if (circles > 999999n) {
+    if (circles > 999999n || circles > MAX_PHYSICAL) {
       setStatus("I admire your confidence...");
       return;
     }
@@ -420,10 +449,6 @@ export default function BurnPage() {
           ? `${egg}\nYou only have ${circlesAvailable} physical circles worth of tokens, not quite enough. I wish you had more, too.`
           : `You only have ${circlesAvailable} physical circles worth of tokens, not quite enough. I wish you had more, too.`
       );
-      return;
-    }
-    if (circles > MAX_PHYSICAL) {
-      setStatus("I admire your confidence...");
       return;
     }
 
@@ -440,21 +465,14 @@ export default function BurnPage() {
       const signature = await withWorkingConnection(
         connection.rpcEndpoint,
         async (conn) => {
-          const tokenAccount = await getAssociatedTokenAddress(
-            CIRCLES_MINT,
-            publicKey,
-            false,
-            TOKEN_PROGRAM_ID
-          );
-
           const instruction = createBurnCheckedInstruction(
-            tokenAccount,
+            sourceTokenAccount,
             CIRCLES_MINT,
             publicKey,
             burnAmount,
             DECIMALS,
             [],
-            TOKEN_PROGRAM_ID
+            tokenProgramId
           );
 
           const { blockhash, lastValidBlockHeight } =
@@ -579,7 +597,7 @@ export default function BurnPage() {
               <div style={{ fontSize: 20, fontWeight: 800, marginTop: 10 }}>
                 {circlesBig.toString()} physical circle
                 {circlesBig === 1n ? "" : "s"}
-                <br />({ (circlesBig * 1000n).toString() } CIRCLES token)
+                <br />({(circlesBig * 1000n).toString()} CIRCLES token)
               </div>
             </div>
           )}

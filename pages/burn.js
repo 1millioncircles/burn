@@ -6,6 +6,7 @@ import {
   TOKEN_PROGRAM_ID,
   TOKEN_2022_PROGRAM_ID,
   createBurnCheckedInstruction,
+  getAssociatedTokenAddress,
 } from "@solana/spl-token";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 
@@ -367,64 +368,114 @@ export default function BurnPage() {
       return;
     }
 
-    try {
-      await withWorkingConnection(connection.rpcEndpoint, async (conn) => {
-        const mintInfo = await conn.getAccountInfo(CIRCLES_MINT, "confirmed");
-        const programId =
-          mintInfo && mintInfo.owner.equals(TOKEN_2022_PROGRAM_ID)
-            ? TOKEN_2022_PROGRAM_ID
-            : TOKEN_PROGRAM_ID;
-        setTokenProgramId(programId);
+    const urls = [
+      "https://solana.drpc.org",
+    ];
 
-        const resp = await conn.getParsedTokenAccountsByOwner(
-          publicKey,
-          { mint: CIRCLES_MINT },
-          "confirmed"
-        );
+    let lastError = null;
+
+    for (const url of urls) {
+      try {
+        const conn = new Connection(url, "confirmed");
+        const accounts = [];
+
+        try {
+          const parsed = await conn.getParsedTokenAccountsByOwner(
+            publicKey,
+            { mint: CIRCLES_MINT },
+            "confirmed"
+          );
+          for (const item of parsed.value) {
+            const ta = item.account?.data?.parsed?.info?.tokenAmount;
+            if (!ta) continue;
+            accounts.push({
+              pubkey: item.pubkey,
+              raw: BigInt(ta.amount),
+              ui: Number(ta.uiAmount || 0),
+            });
+          }
+        } catch (e) {
+          lastError = e;
+        }
+
+        if (accounts.length === 0) {
+          try {
+            const rawAccounts = await conn.getTokenAccountsByOwner(
+              publicKey,
+              { mint: CIRCLES_MINT }
+            );
+            for (const item of rawAccounts.value) {
+              const bal = await conn.getTokenAccountBalance(item.pubkey);
+              accounts.push({
+                pubkey: item.pubkey,
+                raw: BigInt(bal.value.amount),
+                ui: Number(bal.value.uiAmount || 0),
+              });
+            }
+          } catch (e) {
+            lastError = e;
+          }
+        }
+
+        if (accounts.length === 0) {
+          for (const pid of [TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID]) {
+            try {
+              const ata = await getAssociatedTokenAddress(
+                CIRCLES_MINT,
+                publicKey,
+                true,
+                pid
+              );
+              const bal = await conn.getTokenAccountBalance(ata);
+              accounts.push({
+                pubkey: ata,
+                raw: BigInt(bal.value.amount),
+                ui: Number(bal.value.uiAmount || 0),
+              });
+            } catch (e) {
+              lastError = e;
+            }
+          }
+        }
+
+        if (accounts.length === 0) continue;
 
         let totalRaw = 0n;
         let bestAcct = null;
         let bestRaw = 0n;
         let uiTotal = 0;
-
-        for (const item of resp.value) {
-          const raw = BigInt(item.account.data.parsed.info.tokenAmount.amount);
-          uiTotal += Number(item.account.data.parsed.info.tokenAmount.uiAmount || 0);
-          totalRaw += raw;
-          if (raw > bestRaw) {
-            bestRaw = raw;
-            bestAcct = item.pubkey;
+        for (const acct of accounts) {
+          totalRaw += acct.raw;
+          uiTotal += acct.ui;
+          if (acct.raw > bestRaw) {
+            bestRaw = acct.raw;
+            bestAcct = acct.pubkey;
           }
         }
 
         setRawBalance(totalRaw);
         setSourceTokenAccount(bestAcct);
-        setTokenBalance(uiTotal.toLocaleString(undefined, { maximumFractionDigits: 6 }));
+        setTokenBalance(
+          uiTotal.toLocaleString(undefined, { maximumFractionDigits: 6 })
+        );
         setPhysicalCircles((totalRaw / UNITS_PER_CIRCLE).toLocaleString());
-      });
-    } catch (error) {
-      console.error(error);
-      setTokenBalance("0");
-      setPhysicalCircles("0");
-      setRawBalance(0n);
-      setSourceTokenAccount(null);
-    }
-  }, [connection, publicKey]);
-
-  useEffect(() => {
-    loadBalance();
-  }, [loadBalance]);
-
-  async function burnTokens() {
-    if (!publicKey) {
-      setStatus("Connect wallet first.");
-      return;
-    }
-    if (!sourceTokenAccount) {
-      setStatus("It seems like you don't have any circles. YET.");
-      return;
+        setStatus("");
+        return;
+      } catch (e) {
+        lastError = e;
+      }
     }
 
+    setTokenBalance("0");
+    setPhysicalCircles("0");
+    setRawBalance(0n);
+    setSourceTokenAccount(null);
+    setStatus(
+      lastError
+        ? `Failed to load token info: ${lastError.message || lastError}`
+        : "It seems like you don't have any circles. YET."
+    );
+  }, [publicKey]);
     const s = amount.trim();
     if (!s || !/^[0-9]+$/.test(s)) {
       setStatus("Entire circles only, please! (No decimals 'round here).");

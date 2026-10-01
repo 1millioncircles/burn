@@ -254,8 +254,15 @@ export default function BurnPage() {
           </button>
 
           <p style={{ marginTop: "20px" }}>
-            Claim after you burn. Shipping after the millionth circle.
-          </p>
+Blockchain transactions are irreversible.
+
+Burn at your own risk.
+
+By clicking this button you confirm that you understand and accept all responsibility.
+To redeem your physical circles, you must claim within 24 hours by emailing 1millioncircles@gmail.com.
+
+Unclaimed circles will be destroyed.
+Thank you for truly supporting the 1 million circles project.          </p>
         </>
       )}
 

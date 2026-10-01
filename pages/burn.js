@@ -8,7 +8,7 @@ import {
   createBurnCheckedInstruction,
   getAssociatedTokenAddress,
 } from "@solana/spl-token";
-import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@solana/wallet-adapter-react";
 
 const WalletMultiButton = dynamic(
   async () => (await import("@solana/wallet-adapter-react-ui")).WalletMultiButton,
@@ -17,7 +17,7 @@ const WalletMultiButton = dynamic(
 
 // yoooo what's up welcome to the code for this particular part of this website. I wrote this from scratch with chat gpt 5.2's help over around 100 queries and around 6-8 legitimate hours of work. This was my first time really ever coding anything blockchain transaction related and I truly built this page from the ground up. I'm not sure if it could be simplified more because I ran into many errors along the way trying to get it to really connect but here it is, a very simple burn function with 1000:1 ratio, caps at 1 million circles. This exact blockchain code on this page was the biggest hurdle mentally that I had been facing for the past 6 months since coming up with this idea in regards to preparation. I'd considered hiring someone but I didn't want to invite a lack of security, so here we are. Thank you for reading. I hope you have a wonderful day
 // september 25 2025 rpcs and other shit have changed the way the code works and it broke a few weeks ago, been trying to figure it out and i hope this fucking works. chatGPT 5.6
-// september 30 2026 rebuilt burn send: fresh blockhash, confirm with lastValidBlockHeight, silent RPC fallback. easter eggs restored from the january page. stay round.
+// september 30 2026 rebuilt burn send: fresh blockhash, confirm with lastValidBlockHeight. easter eggs restored from the january page. stay round.
 
 const CIRCLES_MINT = new PublicKey(
   "Aea8zJW7jp1wkct3BjMeekBC1RQnHQyrvNutigc3pump"
@@ -27,13 +27,7 @@ const DECIMALS = 6;
 const TOKENS_PER_CIRCLE = 1000;
 const UNITS_PER_CIRCLE = BigInt(TOKENS_PER_CIRCLE) * 10n ** BigInt(DECIMALS);
 const MAX_PHYSICAL = 1_000_000n;
-
-const ENDPOINTS = [
-  "https://solana.drpc.org",
-  "https://solana-rpc.publicnode.com",
-  "https://rpc.ankr.com/solana",
-  "https://api.mainnet-beta.solana.com",
-];
+const RPC = "https://solana.drpc.org";
 
 function eggFor(circles) {
   return circles === 1n
@@ -319,24 +313,10 @@ function eggFor(circles) {
     : "";
 }
 
-async function withWorkingConnection(preferred, fn) {
-  const urls = [preferred, ...ENDPOINTS.filter((url) => url !== preferred)];
-  let lastError;
-  for (const url of urls) {
-    try {
-      const connection = new Connection(url, "confirmed");
-      return await fn(connection);
-    } catch (error) {
-      lastError = error;
-    }
-  }
-  throw lastError;
-}
-
 export default function BurnPage() {
   const router = useRouter();
-  const { connection } = useConnection();
   const { publicKey, sendTransaction, connected } = useWallet();
+  const connection = useMemo(() => new Connection(RPC, "confirmed"), []);
 
   const [tokenBalance, setTokenBalance] = useState("0");
   const [physicalCircles, setPhysicalCircles] = useState("0");
@@ -368,114 +348,123 @@ export default function BurnPage() {
       return;
     }
 
-    const urls = [
-      "https://solana.drpc.org",
-    ];
+    try {
+      const mintInfo = await connection.getAccountInfo(CIRCLES_MINT, "confirmed");
+      const programId =
+        mintInfo && mintInfo.owner.equals(TOKEN_2022_PROGRAM_ID)
+          ? TOKEN_2022_PROGRAM_ID
+          : TOKEN_PROGRAM_ID;
+      setTokenProgramId(programId);
 
-    let lastError = null;
+      const accounts = [];
 
-    for (const url of urls) {
       try {
-        const conn = new Connection(url, "confirmed");
-        const accounts = [];
+        const parsed = await connection.getParsedTokenAccountsByOwner(
+          publicKey,
+          { mint: CIRCLES_MINT },
+          "confirmed"
+        );
+        for (const item of parsed.value) {
+          const ta = item.account?.data?.parsed?.info?.tokenAmount;
+          if (!ta) continue;
+          accounts.push({
+            pubkey: item.pubkey,
+            raw: BigInt(ta.amount),
+            ui: Number(ta.uiAmount || 0),
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
 
+      if (accounts.length === 0) {
         try {
-          const parsed = await conn.getParsedTokenAccountsByOwner(
+          const rawAccounts = await connection.getTokenAccountsByOwner(
             publicKey,
-            { mint: CIRCLES_MINT },
-            "confirmed"
+            { mint: CIRCLES_MINT }
           );
-          for (const item of parsed.value) {
-            const ta = item.account?.data?.parsed?.info?.tokenAmount;
-            if (!ta) continue;
+          for (const item of rawAccounts.value) {
+            const bal = await connection.getTokenAccountBalance(item.pubkey);
             accounts.push({
               pubkey: item.pubkey,
-              raw: BigInt(ta.amount),
-              ui: Number(ta.uiAmount || 0),
+              raw: BigInt(bal.value.amount),
+              ui: Number(bal.value.uiAmount || 0),
             });
           }
         } catch (e) {
-          lastError = e;
+          console.error(e);
         }
-
-        if (accounts.length === 0) {
-          try {
-            const rawAccounts = await conn.getTokenAccountsByOwner(
-              publicKey,
-              { mint: CIRCLES_MINT }
-            );
-            for (const item of rawAccounts.value) {
-              const bal = await conn.getTokenAccountBalance(item.pubkey);
-              accounts.push({
-                pubkey: item.pubkey,
-                raw: BigInt(bal.value.amount),
-                ui: Number(bal.value.uiAmount || 0),
-              });
-            }
-          } catch (e) {
-            lastError = e;
-          }
-        }
-
-        if (accounts.length === 0) {
-          for (const pid of [TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID]) {
-            try {
-              const ata = await getAssociatedTokenAddress(
-                CIRCLES_MINT,
-                publicKey,
-                true,
-                pid
-              );
-              const bal = await conn.getTokenAccountBalance(ata);
-              accounts.push({
-                pubkey: ata,
-                raw: BigInt(bal.value.amount),
-                ui: Number(bal.value.uiAmount || 0),
-              });
-            } catch (e) {
-              lastError = e;
-            }
-          }
-        }
-
-        if (accounts.length === 0) continue;
-
-        let totalRaw = 0n;
-        let bestAcct = null;
-        let bestRaw = 0n;
-        let uiTotal = 0;
-        for (const acct of accounts) {
-          totalRaw += acct.raw;
-          uiTotal += acct.ui;
-          if (acct.raw > bestRaw) {
-            bestRaw = acct.raw;
-            bestAcct = acct.pubkey;
-          }
-        }
-
-        setRawBalance(totalRaw);
-        setSourceTokenAccount(bestAcct);
-        setTokenBalance(
-          uiTotal.toLocaleString(undefined, { maximumFractionDigits: 6 })
-        );
-        setPhysicalCircles((totalRaw / UNITS_PER_CIRCLE).toLocaleString());
-        setStatus("");
-        return;
-      } catch (e) {
-        lastError = e;
       }
+
+      if (accounts.length === 0) {
+        for (const pid of [TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID]) {
+          try {
+            const ata = await getAssociatedTokenAddress(
+              CIRCLES_MINT,
+              publicKey,
+              true,
+              pid
+            );
+            const bal = await connection.getTokenAccountBalance(ata);
+            accounts.push({
+              pubkey: ata,
+              raw: BigInt(bal.value.amount),
+              ui: Number(bal.value.uiAmount || 0),
+            });
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      }
+
+      let totalRaw = 0n;
+      let bestAcct = null;
+      let bestRaw = 0n;
+      let uiTotal = 0;
+      for (const acct of accounts) {
+        totalRaw += acct.raw;
+        uiTotal += acct.ui;
+        if (acct.raw > bestRaw) {
+          bestRaw = acct.raw;
+          bestAcct = acct.pubkey;
+        }
+      }
+
+      setRawBalance(totalRaw);
+      setSourceTokenAccount(bestAcct);
+      setTokenBalance(
+        uiTotal.toLocaleString(undefined, { maximumFractionDigits: 6 })
+      );
+      setPhysicalCircles((totalRaw / UNITS_PER_CIRCLE).toLocaleString());
+      setStatus(
+        accounts.length
+          ? ""
+          : "It seems like you don't have any circles. YET."
+      );
+    } catch (error) {
+      console.error(error);
+      setTokenBalance("0");
+      setPhysicalCircles("0");
+      setRawBalance(0n);
+      setSourceTokenAccount(null);
+      setStatus(`Failed to load token info: ${error?.message || error}`);
+    }
+  }, [connection, publicKey]);
+
+  useEffect(() => {
+    loadBalance();
+  }, [loadBalance]);
+
+  async function burnTokens() {
+    if (!publicKey) {
+      setStatus("Connect wallet first.");
+      return;
+    }
+    if (!sourceTokenAccount) {
+      setStatus("It seems like you don't have any circles. YET.");
+      return;
     }
 
-    setTokenBalance("0");
-    setPhysicalCircles("0");
-    setRawBalance(0n);
-    setSourceTokenAccount(null);
-    setStatus(
-      lastError
-        ? `Failed to load token info: ${lastError.message || lastError}`
-        : "It seems like you don't have any circles. YET."
-    );
-  }, [publicKey]);
     const s = amount.trim();
     if (!s || !/^[0-9]+$/.test(s)) {
       setStatus("Entire circles only, please! (No decimals 'round here).");
@@ -513,46 +502,39 @@ export default function BurnPage() {
     try {
       if (!egg) setStatus("Preparing burn…");
 
-      const signature = await withWorkingConnection(
-        connection.rpcEndpoint,
-        async (conn) => {
-          const instruction = createBurnCheckedInstruction(
-            sourceTokenAccount,
-            CIRCLES_MINT,
-            publicKey,
-            burnAmount,
-            DECIMALS,
-            [],
-            tokenProgramId
-          );
-
-          const { blockhash, lastValidBlockHeight } =
-            await conn.getLatestBlockhash("confirmed");
-
-          const transaction = new Transaction({
-            feePayer: publicKey,
-            blockhash,
-            lastValidBlockHeight,
-          }).add(instruction);
-
-          if (!egg) setStatus("Waiting for wallet approval...");
-          const sig = await sendTransaction(transaction, conn, {
-            skipPreflight: false,
-            maxRetries: 3,
-          });
-
-          const result = await conn.confirmTransaction(
-            { signature: sig, blockhash, lastValidBlockHeight },
-            "confirmed"
-          );
-
-          if (result.value.err) {
-            throw new Error("Chain rejected the burn.");
-          }
-
-          return sig;
-        }
+      const instruction = createBurnCheckedInstruction(
+        sourceTokenAccount,
+        CIRCLES_MINT,
+        publicKey,
+        burnAmount,
+        DECIMALS,
+        [],
+        tokenProgramId
       );
+
+      const { blockhash, lastValidBlockHeight } =
+        await connection.getLatestBlockhash("confirmed");
+
+      const transaction = new Transaction({
+        feePayer: publicKey,
+        blockhash,
+        lastValidBlockHeight,
+      }).add(instruction);
+
+      if (!egg) setStatus("Waiting for wallet approval...");
+      const signature = await sendTransaction(transaction, connection, {
+        skipPreflight: false,
+        maxRetries: 3,
+      });
+
+      const result = await connection.confirmTransaction(
+        { signature, blockhash, lastValidBlockHeight },
+        "confirmed"
+      );
+
+      if (result.value.err) {
+        throw new Error("Chain rejected the burn.");
+      }
 
       setStatus(egg ? egg.trim() : `Burn successful. ${signature}`);
       setAmount("");
@@ -640,7 +622,13 @@ export default function BurnPage() {
           {inputIsValid && (
             <div style={{ marginTop: 16 }}>
               {circlesBig % 10000n === 0n && circlesBig >= 10000n && (
-                <div style={{ fontSize: 33, fontWeight: 600, letterSpacing: "0.04em" }}>
+                <div
+                  style={{
+                    fontSize: 33,
+                    fontWeight: 600,
+                    letterSpacing: "0.04em",
+                  }}
+                >
                   {(circlesBig / 10000n).toString()} FULL SHEET
                   {circlesBig / 10000n === 1n ? "" : "S"}
                 </div>

@@ -255,13 +255,14 @@ export default function BurnPage() {
 
           <p style={{ marginTop: "20px" }}>
 Blockchain transactions are irreversible.
-
+<br />
 Burn at your own risk.
-
+<br />
 By clicking this button you confirm that you understand and accept all responsibility.
 To redeem your physical circles, you must claim within 24 hours by emailing 1millioncircles@gmail.com.
-
+<br />
 Unclaimed circles will be destroyed.
+<br />
 Thank you for truly supporting the 1 million circles project.          </p>
         </>
       )}

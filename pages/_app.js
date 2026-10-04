@@ -7,8 +7,7 @@ import "@solana/wallet-adapter-react-ui/styles.css";
 
 export default function App({ Component, pageProps }) {
   // Public RPC that allows browser access without an API key
-  const endpoint = "https://mainnet.helius-rpc.com/?api-key=6c800a92-a767-4c0e-b897-e7ae8d275453";
-
+const endpoint = "https://solana-rpc.publicnode.com";
   const wallets = useMemo(
     () => [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
     []

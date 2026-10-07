@@ -381,7 +381,6 @@ return;
     maxWidth: 320,
     minWidth: 240,
     boxSizing: "border-box",
-    overflow: "hidden",
     display: "flex",
     justifyContent: "center",
   }}
